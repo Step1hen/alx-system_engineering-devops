@@ -8,7 +8,7 @@ file_line { 'install':
   ensure => 'present',
   path   => '/etc/nginx/sites-enabled/default',
   after  => 'listen 80 default_server;',
-  line   => 'rewrite ^/redirect_me https://www.github.com/Step1hen permanent;',
+  line   => 'rewrite ^/redirect_me https://www.github.com/besthor permanent;',
 }
 
 file { '/var/www/html/index.html':
@@ -18,4 +18,4 @@ file { '/var/www/html/index.html':
 service { 'nginx':
   ensure  => running,
   require => Package['nginx'],
-}i
+}
