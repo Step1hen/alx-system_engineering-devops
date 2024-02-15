@@ -1,32 +1,42 @@
 #!/usr/bin/python3
 """
-Queries the Reddit API and print the titles of the first 10
-hot posts listed for a given subreddit
+Module to query the Reddit API for the top ten hot posts of a subreddit
 """
-
 import requests
 
 
 def top_ten(subreddit):
     """
-    Prints the titles of the first 10 hot posts for a given subreddit
-    Args:
-        subreddit (str): the name of the subreddit
+    Prints the titles of the first 10 hot posts listed for a given subreddit.
     """
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
-    headers = {'User-Agent': 'queenbae'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    if response.status_code != 200:
-        print(None)
+    if subreddit is None or type(subreddit) is not str:
+        print("None")
         return
 
-    data = response.json()
+    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+    headers = {
+        'User-Agent': ('Python:alx-system_engineering-devops:v1.0 '
+                       '(by /u/AmineLamuadni)')
+    }
+    params = {
+        "limit": 10
+    }
 
-    if 'data' not in data or 'children' not in data['data']:
-        print(None)
-        return
+    try:
+        response = requests.get(url, headers=headers, params=params,
+                                allow_redirects=False)
+        if response.status_code != 200:
+            print("None")
+            return
+        if not response.text:
+            print("None")
+            return
+        posts = response.json().get("data", {}).get("children", [])
+        for post in posts:
+            print(post.get("data", {}).get("title"))
+    except requests.RequestException:
+        print("None")
 
-    posts = data['data']['children']
-    for post in posts:
-        print(post['data']['title'])
+
+if __name__ == "__main__":
+    pass
